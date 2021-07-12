@@ -6,19 +6,21 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.Route;
 
-@Route("")
+@Route("login")
 public class LoginForm extends VerticalLayout {
 
     private final UserService userService = new UserService();
     private final TextField username = new TextField("Username");
     private final PasswordField password = new PasswordField("Password");
     private final Button loginButton = new Button("Login");
+    private final Button registerButton = new Button("Register");
     private final Binder<UserDto> binder = new Binder<>(UserDto.class);
     private UserDto userDto = new UserDto();
 
@@ -29,12 +31,13 @@ public class LoginForm extends VerticalLayout {
         setUserDto(userDto);
 
         loginButton.addClickListener(e -> loginUser());
+        registerButton.addClickListener(e -> UI.getCurrent().getPage().setLocation("register-view"));
 
         add (
                 new H1("Welcome"),
                 username,
                 password,
-                loginButton
+                new HorizontalLayout(loginButton, registerButton)
         );
     }
 

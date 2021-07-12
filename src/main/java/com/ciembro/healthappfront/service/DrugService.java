@@ -16,6 +16,7 @@ import java.util.*;
 public class DrugService {
 
     private RestTemplate restTemplate = new RestTemplate();
+    private final static String BASE_URL = "http://localhost:8080/v1";
 
     public List<DrugDto> getUserDrugList(){
 
@@ -28,7 +29,7 @@ public class DrugService {
                 HttpEntity<String> entity = new HttpEntity<>(headers);
 
                 ResponseEntity<DrugDto[]> response = restTemplate.exchange(
-                        getUri(),
+                        BASE_URL + "/drugs/all",
                         HttpMethod.GET,
                         entity,
                         DrugDto[].class);
@@ -44,10 +45,5 @@ public class DrugService {
         return new ArrayList<>();
     }
 
-    private URI getUri(){
-        return UriComponentsBuilder.fromHttpUrl("http://localhost:8080/v1" + "/user/drugs/all")
-                .build()
-                .encode()
-                .toUri();
-    }
+
 }
