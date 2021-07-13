@@ -21,13 +21,20 @@ public class SideEffectService {
     private RestTemplate restTemplate = new RestTemplate();
     private final static String BASE_URL = "http://localhost:8080/v1";
 
+    private HttpHeaders createHeaders(){
+        Object objToken =  VaadinSession.getCurrent().getAttribute("token");
+        if (objToken != null) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", "Bearer " + objToken);
+            return headers;
+        }
+        return null;
+    }
+
     public List<SideEffectDto> getSideEffectList(long drugId){
         try {
-            Object objToken =  VaadinSession.getCurrent().getAttribute("token");
-            if (objToken != null){
-                HttpHeaders headers = new HttpHeaders();
-                headers.set("Authorization", "Bearer " + objToken);
-
+            HttpHeaders headers = createHeaders();
+            if (headers != null){
                 HttpEntity<String> entity = new HttpEntity<>(headers);
 
                 ResponseEntity<SideEffectDto[]> response = restTemplate.exchange(
@@ -49,11 +56,8 @@ public class SideEffectService {
 
     public void deleteSideEffectFromList(SideEffectDto sideEffectDto){
         try {
-            Object objToken =  VaadinSession.getCurrent().getAttribute("token");
-            if (objToken != null){
-                HttpHeaders headers = new HttpHeaders();
-                headers.set("Authorization", "Bearer " + objToken);
-
+            HttpHeaders headers = createHeaders();
+            if (headers != null){
                 HttpEntity<SideEffectDto> entity = new HttpEntity<>(sideEffectDto, headers);
 
                 restTemplate.exchange(

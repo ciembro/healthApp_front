@@ -24,11 +24,12 @@ public class MainView extends VerticalLayout {
     private final Binder<DrugDto> binder = new Binder<>(DrugDto.class);
     private Button addToListButton = new Button("Dodaj lek");
     private SearchDrugForm searchDrugForm = new SearchDrugForm(this);
+    private Label emptyList = new Label("Obecnie Twoja lista leków jest pusta");
     private DrugDto drugDto;
 
     public MainView(){
         add (new H1("Witaj, " + VaadinSession.getCurrent().getAttribute("username") + "!"));
-
+        addDrugGridButtons();
         addToListButton.addClickListener(e -> {
             searchDrugForm.setVisible(true);
             drugGrid.setVisible(false);
@@ -36,45 +37,46 @@ public class MainView extends VerticalLayout {
         });
 
         drugGrid.getDrugGrid().setSizeFull();
-
-        add(addToListButton, searchDrugForm, drugGrid.getDrugGrid());
         setSizeFull();
-        getUserDrugList();
         refresh();
+        add(addToListButton,
+                emptyList,
+                searchDrugForm,
+                drugGrid.getDrugGrid());
+
     }
 
-    private void getUserDrugList(){
-        List<DrugDto> drugs = drugService.getUserDrugList();
-        Label emptyList = new Label("Obecnie Twoja lista leków jest pusta");
-        if (drugs.isEmpty()){
-            add(emptyList);
-        } else {
-            this.remove(emptyList);
-            drugGrid.setDrugGrid(drugs);
+    private void addDrugGridButtons(){
+        drugGrid.getDrugGrid().addComponentColumn(drugDto -> {
+            Button button = new Button("Szczegóły");
+            button.addClickListener(e -> UI.getCurrent().getPage().setLocation("details-view/" + drugDto.getId()));
+            return button;
+        });
 
-            drugGrid.getDrugGrid().addComponentColumn(drugDto -> {
-                Button button = new Button("Szczegóły");
-                button.addClickListener(e -> UI.getCurrent().getPage().setLocation("details-view/" + drugDto.getId()));
-                return button;
+        drugGrid.getDrugGrid().addComponentColumn(drugDto -> {
+            Button button = new Button("Usuń");
+            button.addClickListener(e -> {
+                drugService.removeDrugFromUserList(drugDto);
+                refresh();
             });
-
-            drugGrid.getDrugGrid().addComponentColumn(drugDto -> {
-                Button button = new Button("Usuń");
-                button.addClickListener(e -> {
-                    drugService.removeDrugFromUserList(drugDto);
-                    refresh();
-                });
-                return button;
-            });
-        }
+            return button;
+        });
     }
 
     private void setDrugDto(DrugDto drugDto){
         binder.setBean(drugDto);
     }
 
-    private void refresh(){
-        drugGrid.setDrugGrid(drugService.getUserDrugList());
+    public void refresh(){
+        List<DrugDto> drugs = drugService.getUserDrugList();
+        if (drugs.isEmpty()){
+            drugGrid.setVisible(false);
+            emptyList.setVisible(true);
+        } else {
+            emptyList.setVisible(false);
+            drugGrid.setVisible(true);
+            drugGrid.setDrugGrid(drugs);
+        }
     }
 
     public Grid<DrugDto> getDrugGrid() {

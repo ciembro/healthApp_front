@@ -8,7 +8,6 @@ public class DrugGrid {
 
     private Grid<DrugDto> drugGrid = new Grid<>(DrugDto.class);
 
-
     public DrugGrid(){
         removeDefaultColumns();
         createColumns();
