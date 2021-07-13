@@ -23,6 +23,7 @@ public class LoginForm extends VerticalLayout {
     private final Button registerButton = new Button("Register");
     private final Binder<UserDto> binder = new Binder<>(UserDto.class);
     private UserDto userDto = new UserDto();
+    private Label badCredentialsLabel = new Label("Bad credentials");
 
     public LoginForm(){
 
@@ -37,8 +38,11 @@ public class LoginForm extends VerticalLayout {
                 new H1("Welcome"),
                 username,
                 password,
-                new HorizontalLayout(loginButton, registerButton)
+                new HorizontalLayout(loginButton, registerButton),
+                badCredentialsLabel
         );
+
+        badCredentialsLabel.setVisible(false);
     }
 
     public void setUserDto(UserDto userDto) {
@@ -47,11 +51,10 @@ public class LoginForm extends VerticalLayout {
 
     private void loginUser(){
         UserDto userDto = binder.getBean();
-        Label label = new Label("Bad credentials");
+
         boolean isAuthenticated = userService.authenticateUser(userDto);
         if (!isAuthenticated){
-            add(label);
-
+            badCredentialsLabel.setVisible(true);
         } else {
             UI.getCurrent().getPage().setLocation("user-view");
         }

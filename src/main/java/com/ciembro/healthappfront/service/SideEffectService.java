@@ -3,20 +3,25 @@ package com.ciembro.healthappfront.service;
 import com.ciembro.healthappfront.domain.DrugDto;
 import com.ciembro.healthappfront.domain.SideEffectDto;
 import com.vaadin.flow.server.VaadinSession;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-import java.util.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 @Service
-public class DrugService {
-
+public class SideEffectService {
     private RestTemplate restTemplate = new RestTemplate();
     private final static String BASE_URL = "http://localhost:8080/v1";
 
-    public List<DrugDto> getUserDrugList(){
+    public List<SideEffectDto> getSideEffectList(long drugId){
         try {
             Object objToken =  VaadinSession.getCurrent().getAttribute("token");
             if (objToken != null){
@@ -25,13 +30,13 @@ public class DrugService {
 
                 HttpEntity<String> entity = new HttpEntity<>(headers);
 
-                ResponseEntity<DrugDto[]> response = restTemplate.exchange(
-                        BASE_URL + "/drugs/all",
+                ResponseEntity<SideEffectDto[]> response = restTemplate.exchange(
+                        BASE_URL + "/effects/" + drugId,
                         HttpMethod.GET,
                         entity,
-                        DrugDto[].class);
+                        SideEffectDto[].class);
 
-                DrugDto[] responseBody = response.getBody();
+                SideEffectDto[] responseBody = response.getBody();
                 return Optional.ofNullable(responseBody)
                         .map(Arrays::asList)
                         .orElse(new ArrayList<>());
@@ -42,51 +47,24 @@ public class DrugService {
         return new ArrayList<>();
     }
 
-    public void removeDrugFromUserList(DrugDto drugDto){
+    public void deleteSideEffectFromList(SideEffectDto sideEffectDto){
         try {
             Object objToken =  VaadinSession.getCurrent().getAttribute("token");
             if (objToken != null){
                 HttpHeaders headers = new HttpHeaders();
                 headers.set("Authorization", "Bearer " + objToken);
 
-                HttpEntity<DrugDto> entity = new HttpEntity<>(drugDto, headers);
+                HttpEntity<SideEffectDto> entity = new HttpEntity<>(sideEffectDto, headers);
 
                 restTemplate.exchange(
-                        BASE_URL + "/drugs",
+                        BASE_URL + "/effects",
                         HttpMethod.DELETE,
                         entity,
-                        DrugDto.class);
+                        SideEffectDto.class);
             }
         } catch (RestClientException e){
             System.out.println(e.getMessage());
         }
+
     }
-
-    public List<DrugDto> searchMatchingDrugs(String text){
-        try {
-            Object objToken =  VaadinSession.getCurrent().getAttribute("token");
-            if (objToken != null){
-                HttpHeaders headers = new HttpHeaders();
-                headers.set("Authorization", "Bearer " + objToken);
-
-                HttpEntity<String> entity = new HttpEntity<>(headers);
-
-                ResponseEntity<DrugDto[]> response = restTemplate.exchange(
-                        BASE_URL + "/drugs/" + text,
-                        HttpMethod.GET,
-                        entity,
-                        DrugDto[].class);
-
-                DrugDto[] responseBody = response.getBody();
-                return Optional.ofNullable(responseBody)
-                        .map(Arrays::asList)
-                        .orElse(new ArrayList<>());
-            }
-        } catch (RestClientException e){
-            System.out.println(e.getMessage());
-        }
-        return new ArrayList<>();
-    }
-
-
 }

@@ -1,6 +1,8 @@
 package com.ciembro.healthappfront;
 
 import com.ciembro.healthappfront.domain.DrugDto;
+import com.ciembro.healthappfront.domain.DrugGrid;
+import com.ciembro.healthappfront.domain.UserDto;
 import com.ciembro.healthappfront.service.DrugService;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -8,10 +10,9 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
-
-import javax.swing.*;
 import java.util.List;
 
 
@@ -19,16 +20,27 @@ import java.util.List;
 public class MainView extends VerticalLayout {
 
     private final DrugService drugService = new DrugService();
-    private Grid<DrugDto> drugGrid = new Grid<>(DrugDto.class);
+    private DrugGrid drugGrid = new DrugGrid();
+    private final Binder<DrugDto> binder = new Binder<>(DrugDto.class);
+    private Button addToListButton = new Button("Dodaj lek");
+    private SearchDrugForm searchDrugForm = new SearchDrugForm(this);
+    private DrugDto drugDto;
 
     public MainView(){
         add (new H1("Witaj, " + VaadinSession.getCurrent().getAttribute("username") + "!"));
 
+        addToListButton.addClickListener(e -> {
+            searchDrugForm.setVisible(true);
+            drugGrid.setVisible(false);
+            addToListButton.setVisible(false);
+        });
+
+        drugGrid.getDrugGrid().setSizeFull();
+
+        add(addToListButton, searchDrugForm, drugGrid.getDrugGrid());
+        setSizeFull();
         getUserDrugList();
-        updateDrugGrid();
-
-        drugGrid.addItemDoubleClickListener(e -> UI.getCurrent().getPage().setLocation("details-view"));
-
+        refresh();
     }
 
     private void getUserDrugList(){
@@ -38,39 +50,38 @@ public class MainView extends VerticalLayout {
             add(emptyList);
         } else {
             this.remove(emptyList);
-            drugGrid.removeColumnByKey("id");
-            drugGrid.removeColumnByKey("activeSubstance");
-            drugGrid.removeColumnByKey("brand");
-            drugGrid.removeColumnByKey("dose");
-            drugGrid.removeColumnByKey("leafletUrl");
-            drugGrid.removeColumnByKey("tradeName");
-            drugGrid.removeColumnByKey("commonName");
-            add(drugGrid);
-            drugGrid.addColumn(drugDto -> {
-                String tradeName = drugDto.getTradeName();
-                return tradeName == null ? "-" : tradeName;
-            }).setHeader("Nazwa produktu leczniczego");
-            drugGrid.addColumn(drugDto -> {
-                String commonName = drugDto.getCommonName();
-                return commonName == null ? "-" : commonName;
-            }).setHeader("Nazwa powszechna");
-            drugGrid.addColumn(drugDto -> {
-                String dose = drugDto.getDose();
-                return dose == null ? "-" : dose;
-            }).setHeader("Moc");
-            drugGrid.addColumn(drugDto -> {
-                String brand = drugDto.getBrand();
-                return brand == null ? "-" : brand;
-            }).setHeader("Podmiot odpowiedzialny");
+            drugGrid.setDrugGrid(drugs);
+
+            drugGrid.getDrugGrid().addComponentColumn(drugDto -> {
+                Button button = new Button("Szczegóły");
+                button.addClickListener(e -> UI.getCurrent().getPage().setLocation("details-view/" + drugDto.getId()));
+                return button;
+            });
+
+            drugGrid.getDrugGrid().addComponentColumn(drugDto -> {
+                Button button = new Button("Usuń");
+                button.addClickListener(e -> {
+                    drugService.removeDrugFromUserList(drugDto);
+                    refresh();
+                });
+                return button;
+            });
         }
     }
 
-    private void updateDrugGrid(){
-        drugGrid.setItems(drugService.getUserDrugList());
+    private void setDrugDto(DrugDto drugDto){
+        binder.setBean(drugDto);
     }
 
-    private void onDoubleClick(){
+    private void refresh(){
+        drugGrid.setDrugGrid(drugService.getUserDrugList());
+    }
 
+    public Grid<DrugDto> getDrugGrid() {
+        return drugGrid.getDrugGrid();
+    }
 
+    public Button getAddToListButton() {
+        return addToListButton;
     }
 }
