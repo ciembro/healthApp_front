@@ -1,7 +1,6 @@
-package com.ciembro.healthappfront.service;
+package com.ciembro.healthappfront.extrasuper.service;
 
-import com.ciembro.healthappfront.domain.DrugDto;
-import com.ciembro.healthappfront.domain.SideEffectDto;
+import com.ciembro.healthappfront.extrasuper.dto.SideEffectDto;
 import com.vaadin.flow.server.VaadinSession;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -54,21 +53,4 @@ public class SideEffectService {
         return new ArrayList<>();
     }
 
-    public void deleteSideEffectFromList(SideEffectDto sideEffectDto){
-        try {
-            HttpHeaders headers = createHeaders();
-            if (headers != null){
-                HttpEntity<SideEffectDto> entity = new HttpEntity<>(sideEffectDto, headers);
-
-                restTemplate.exchange(
-                        BASE_URL + "/effects",
-                        HttpMethod.DELETE,
-                        entity,
-                        SideEffectDto.class);
-            }
-        } catch (RestClientException e){
-            System.out.println(e.getMessage());
-        }
-
-    }
 }

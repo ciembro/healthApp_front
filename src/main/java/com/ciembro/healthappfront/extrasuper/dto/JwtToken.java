@@ -1,4 +1,4 @@
-package com.ciembro.healthappfront.domain;
+package com.ciembro.healthappfront.extrasuper.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

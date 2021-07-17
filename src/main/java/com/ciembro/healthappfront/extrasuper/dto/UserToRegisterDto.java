@@ -1,15 +1,16 @@
-package com.ciembro.healthappfront.domain;
+package com.ciembro.healthappfront.extrasuper.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
+public class UserToRegisterDto {
 
     private String username;
+    private String location;
+    private String email;
     private String password;
 }

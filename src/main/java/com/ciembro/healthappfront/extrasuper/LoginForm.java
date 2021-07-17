@@ -1,7 +1,7 @@
-package com.ciembro.healthappfront;
+package com.ciembro.healthappfront.extrasuper;
 
-import com.ciembro.healthappfront.domain.UserDto;
-import com.ciembro.healthappfront.service.UserService;
+import com.ciembro.healthappfront.extrasuper.dto.UserDto;
+import com.ciembro.healthappfront.extrasuper.service.UserService;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
@@ -11,11 +11,10 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
-import com.vaadin.flow.router.Route;
 
-@Route("login")
 public class LoginForm extends VerticalLayout {
 
+    private MainView parent;
     private final UserService userService = new UserService();
     private final TextField username = new TextField("Username");
     private final PasswordField password = new PasswordField("Password");
@@ -25,23 +24,21 @@ public class LoginForm extends VerticalLayout {
     private UserDto userDto = new UserDto();
     private Label badCredentialsLabel = new Label("Bad credentials");
 
-    public LoginForm(){
-
+    public LoginForm(MainView parent){
+        this.parent = parent;
         binder.forField(username).bind(UserDto::getUsername, UserDto::setUsername);
         binder.forField(password).bind(UserDto::getPassword, UserDto::setPassword);
         setUserDto(userDto);
 
         loginButton.addClickListener(e -> loginUser());
-        registerButton.addClickListener(e -> UI.getCurrent().getPage().setLocation("register-view"));
+        registerButton.addClickListener(e -> UI.getCurrent().getPage().setLocation("register"));
 
-        add (
-                new H1("Welcome"),
+        add (   new H1("Zaloguj się"),
                 username,
                 password,
                 new HorizontalLayout(loginButton, registerButton),
                 badCredentialsLabel
         );
-
         badCredentialsLabel.setVisible(false);
     }
 
@@ -51,12 +48,12 @@ public class LoginForm extends VerticalLayout {
 
     private void loginUser(){
         UserDto userDto = binder.getBean();
-
         boolean isAuthenticated = userService.authenticateUser(userDto);
         if (!isAuthenticated){
             badCredentialsLabel.setVisible(true);
         } else {
-            UI.getCurrent().getPage().setLocation("user-view");
+            parent.setWelcomeHeader(userDto.getUsername());
+            setVisible(false);
         }
 
     }

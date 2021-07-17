@@ -1,8 +1,8 @@
-package com.ciembro.healthappfront.service;
+package com.ciembro.healthappfront.extrasuper.service;
 
-import com.ciembro.healthappfront.domain.JwtToken;
-import com.ciembro.healthappfront.domain.UserDto;
-import com.ciembro.healthappfront.domain.UserToRegisterDto;
+import com.ciembro.healthappfront.extrasuper.dto.JwtToken;
+import com.ciembro.healthappfront.extrasuper.dto.UserDto;
+import com.ciembro.healthappfront.extrasuper.dto.UserToRegisterDto;
 import com.vaadin.flow.server.VaadinSession;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
@@ -37,7 +37,6 @@ public class UserService {
           if (isRegistered != null){
               return isRegistered;
           }
-
         } catch (RestClientException e) {
             System.out.println(e.getMessage());
         }

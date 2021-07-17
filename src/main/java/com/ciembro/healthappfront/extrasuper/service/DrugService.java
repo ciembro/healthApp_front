@@ -1,11 +1,8 @@
-package com.ciembro.healthappfront.service;
+package com.ciembro.healthappfront.extrasuper.service;
 
-import com.ciembro.healthappfront.SearchDrugForm;
-import com.ciembro.healthappfront.domain.DrugDto;
-import com.ciembro.healthappfront.domain.SideEffectDto;
+import com.ciembro.healthappfront.extrasuper.dto.DrugDto;
 import com.vaadin.flow.server.VaadinSession;
 import org.springframework.http.*;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import java.util.*;
@@ -15,6 +12,33 @@ public class DrugService {
 
     private RestTemplate restTemplate = new RestTemplate();
     private final static String BASE_URL = "http://localhost:8080/v1";
+
+    public List<DrugDto> getExampleData(){
+
+        List<DrugDto> drugDtos = new ArrayList<>();
+        drugDtos.add(new DrugDto(1L,
+                "common",
+                "trade",
+                "dose",
+                "brand",
+                "subst",
+                "http//leaflet.com"));
+        drugDtos.add(new DrugDto(2L,
+                "common2",
+                "trade2",
+                "dose",
+                "brand2",
+                "subst2",
+                "http//leaflet.com"));
+        drugDtos.add(new DrugDto(23L,
+                "common23",
+                "trade23",
+                "dose",
+                "brand23",
+                "subst23",
+                "http//leaflet.com"));
+        return drugDtos;
+    }
 
     private HttpHeaders createHeaders(){
         Object objToken =  VaadinSession.getCurrent().getAttribute("token");
