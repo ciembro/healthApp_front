@@ -3,6 +3,7 @@ package com.ciembro.healthappfront.treatment;
 import com.ciembro.healthappfront.dto.CreatedUserTreatmentDto;
 import com.ciembro.healthappfront.service.DrugService;
 import com.ciembro.healthappfront.service.UserTreatmentService;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -37,6 +38,16 @@ public class UserTreatmentListLayout extends VerticalLayout {
             });
             return button;
         });
+
+        drugGrid.addComponentColumn(createdUserTreatmentDto -> {
+            Button button = new Button("Pobierz ulotkę");
+            button.addClickListener(e -> {
+                UI.getCurrent().getPage()
+                        .setLocation(createdUserTreatmentDto.getDrugDto().getLeafletUrl());
+            });
+            return button;
+        });
+
         drugGrid.setSizeFull();
         add(drugGrid);
         setSizeFull();

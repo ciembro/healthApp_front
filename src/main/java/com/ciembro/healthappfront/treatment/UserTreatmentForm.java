@@ -42,13 +42,11 @@ public abstract class UserTreatmentForm extends VerticalLayout {
         dose.setReadOnly(true);
         brand.setReadOnly(true);
 
-//        getStyle().set("border", "1px solid blue");
-
         saveButton.addClickListener(e -> save());
         cancelButton.addClickListener(e -> setVisible(false));
         HorizontalLayout buttonsLayout = new HorizontalLayout(saveButton, cancelButton);
         buttonsLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
-//        buttonsLayout.getStyle().set("border", "1px solid magenta");
+
         buttonsLayout.setWidthFull();
         add(header, fields, buttonsLayout);
         setSizeFull();

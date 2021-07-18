@@ -24,13 +24,13 @@ public class UserTreatmentAddForm extends UserTreatmentForm {
     @Override
     public void save() {
         userTreatmentDto = binder.getBean();
-        String username = (String) VaadinSession.getCurrent().getAttribute("username");
-        userTreatmentDto.setUsername(username);
-
-        userTreatmentService.createUserTreatment(userTreatmentDto);
-        parent.getUserTreatmentListLayout().setDrugGridItems();
-        setVisible(false);
-
+        if (startedAt.getValue().isBefore(finishedAt.getValue())){
+            String username = (String) VaadinSession.getCurrent().getAttribute("username");
+            userTreatmentDto.setUsername(username);
+            userTreatmentService.createUserTreatment(userTreatmentDto);
+            parent.getUserTreatmentListLayout().setDrugGridItems();
+            setVisible(false);
+        }
     }
 
     public void setUpForm(DrugDto drugDto){

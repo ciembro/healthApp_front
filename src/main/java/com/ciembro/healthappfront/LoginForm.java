@@ -52,11 +52,9 @@ public class LoginForm extends VerticalLayout {
         if (!isAuthenticated){
             badCredentialsLabel.setVisible(true);
         } else {
-            parent.setWelcomeHeader(userDto.getUsername());
-            parent.getMenuLayout().setVisible(true);
+            parent.setWelcomeHeader();
+            parent.showMenu();
             setVisible(false);
         }
-
     }
-
 }
