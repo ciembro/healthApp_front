@@ -14,18 +14,20 @@ public class MainView extends VerticalLayout {
     private H1 welcomeHeader = new H1();
     private LoginForm loginForm = new LoginForm(this);
     private MenuLayout menuLayout = new MenuLayout(this);
+    private EditUserLayout editUserLayout = new EditUserLayout(this);
 
     public MainView() {
+        editUserLayout.setVisible(false);
         if(VaadinSession.getCurrent().getAttribute("token") == null){
             welcomeHeader.setVisible(false);
             menuLayout.setVisible(false);
             loginForm.setVisible(true);
-        }else{
+         }else {
             setWelcomeHeader();
             menuLayout.setVisible(true);
             loginForm.setVisible(false);
         }
-        add(welcomeHeader, menuLayout, loginForm);
+        add(welcomeHeader, menuLayout, loginForm, editUserLayout);
 
         setSizeFull();
     }

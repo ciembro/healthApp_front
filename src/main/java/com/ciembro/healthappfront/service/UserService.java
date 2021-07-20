@@ -21,12 +21,14 @@ public class UserService {
     private final RestTemplate restTemplate = new RestTemplate();
     private HeadersService headersService = HeadersService.INSTANCE;
     private final static String BASE_URL = "http://localhost:8080/v1";
+    private LocationInterpreter locationInterpreter = LocationInterpreter.INSTANCE;
 
     public void changeUserLocation(String location){
         try {
             HttpHeaders headers = headersService.getHeaders();
             if (headers != null){
                 HttpEntity<String> entity = new HttpEntity<>(headers);
+                location = locationInterpreter.prepareQueryParam(location);
                 String username = (String)VaadinSession.getCurrent().getAttribute("username");
                 restTemplate.exchange(
                         BASE_URL + "/" + username + "/" +location,

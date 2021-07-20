@@ -17,7 +17,7 @@ public class UserTreatmentListLayout extends VerticalLayout {
 
     public UserTreatmentListLayout(UserTreatmentsView parent) {
         this.parent = parent;
-        drugGrid.setColumns("startedAt", "finishedAt", "drugDto.internationalName", "drugDto.tradeName", "drugDto.dosage",
+        drugGrid.setColumns("startedAt", "finishedAt", "drugDto.tradeName", "drugDto.dosage",
                 "drugDto.brand");
         setDrugGridItems();
 

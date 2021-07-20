@@ -27,6 +27,10 @@ public class MenuLayout extends VerticalLayout {
         insightsButton.addClickListener(e -> UI.getCurrent().getPage().setLocation("insights"));
         reportButton.addClickListener(e -> UI.getCurrent().getPage().setLocation("report"));
 
+        changeLocationButton.addClickListener(e -> {
+            parent.getEditUserLayout().setUpForm();
+            parent.getEditUserLayout().setVisible(true);
+        });
 
         add(buttons);
         setSizeFull();

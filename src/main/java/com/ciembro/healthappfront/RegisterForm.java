@@ -12,6 +12,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
 
 import java.util.List;
@@ -62,7 +63,9 @@ public class RegisterForm extends VerticalLayout {
 
         locationsComboBox.addValueChangeListener(e -> {
             showSearch();
-            location.setValue(locationsComboBox.getValue());
+            if (locationsComboBox.getValue() != null)
+                location.setValue(locationsComboBox.getValue());
+            locationsComboBox.clear();
         });
 
         add(
@@ -79,6 +82,7 @@ public class RegisterForm extends VerticalLayout {
         List<String> matchingLocations = weatherApiService.getLocations(loc);
         locationsComboBox.setItems(matchingLocations);
         hideSearch();
+
     }
 
     private void hideSearch(){
@@ -104,7 +108,9 @@ public class RegisterForm extends VerticalLayout {
             add(new Label("Error during registering new user. Try again."));
         }
         username.clear();
+        location.clear();
         email.clear();
         password.clear();
+        showSearch();
     }
 }
