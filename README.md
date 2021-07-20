@@ -1,7 +1,7 @@
 # healthApp_front
 Link do backendu: https://github.com/ciembro/healthApp.git
 
--część frontendowa uruchamia się na http://localhost:8083/, backend http://localhost:8080/
+-część frontendowa uruchamia się na http://localhost:8083/, backend http://localhost:8080/ <br>
 -w bazie danych znajduje się 2 użytkowników testowych:
 1. user, hasło: user
 2. admin, hasło: admin <br>
