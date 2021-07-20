@@ -30,6 +30,7 @@ public abstract class UserTreatmentForm extends VerticalLayout {
         this.parent = parent;
 
         FormLayout fields = new FormLayout();
+        startedAt.setRequired(true);
         fields.add(internationalName,
                 tradeName,
                 dose,

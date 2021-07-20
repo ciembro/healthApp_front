@@ -11,18 +11,25 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 public class UserTreatmentListLayout extends VerticalLayout {
 
     private UserTreatmentsView parent;
-    private DrugService drugService = new DrugService();
     private UserTreatmentService userTreatmentService = UserTreatmentService.INSTANCE;
     private Grid<CreatedUserTreatmentDto> drugGrid = new Grid<>(CreatedUserTreatmentDto.class);
 
     public UserTreatmentListLayout(UserTreatmentsView parent) {
         this.parent = parent;
-        drugGrid.setColumns("startedAt");
+        drugGrid.removeAllColumns();
+        drugGrid.addColumn(CreatedUserTreatmentDto::getStartedAt).setHeader("Data rozpoczęcia");
         drugGrid.addColumn
                 (createdUserTreatmentDto -> createdUserTreatmentDto.getFinishedAt() == null ? "-" : createdUserTreatmentDto.getFinishedAt())
-                .setHeader("finishedAt");
-        drugGrid.addColumns("drugDto.tradeName", "drugDto.dosage",
-                "drugDto.brand");
+                .setHeader("Data zakończenia");
+        drugGrid.addColumn
+                (createdUserTreatmentDto -> createdUserTreatmentDto.getDrugDto().getTradeName())
+                .setHeader("Preparat");
+        drugGrid.addColumn
+                (createdUserTreatmentDto -> createdUserTreatmentDto.getDrugDto().getDosage())
+                .setHeader("Moc");
+        drugGrid.addColumn
+                (createdUserTreatmentDto -> createdUserTreatmentDto.getDrugDto().getBrand())
+                .setHeader("Producent");
         setDrugGridItems();
 
         drugGrid.addComponentColumn(createdUserTreatmentDto -> {

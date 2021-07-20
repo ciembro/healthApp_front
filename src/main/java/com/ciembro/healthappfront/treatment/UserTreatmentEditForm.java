@@ -20,7 +20,8 @@ public class UserTreatmentEditForm extends UserTreatmentForm{
     @Override
     public void save() {
         userTreatmentDto = binder.getBean();
-        if (userTreatmentDto.getStartedAt().isBefore(userTreatmentDto.getFinishedAt())){
+        if (startedAt.getValue() != null
+                && (finishedAt.getValue() == null || startedAt.getValue().isBefore(finishedAt.getValue()))){
             userTreatmentService.updateUserTreatment(userTreatmentDto);
             parent.getUserTreatmentListLayout().setDrugGridItems();
             setVisible(false);

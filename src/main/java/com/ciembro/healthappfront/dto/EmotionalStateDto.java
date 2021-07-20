@@ -15,6 +15,6 @@ public class EmotionalStateDto {
 
     @Override
     public String toString() {
-        return plText;
+        return plText.toLowerCase();
     }
 }

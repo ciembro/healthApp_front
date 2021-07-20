@@ -28,7 +28,6 @@ public class InsightEditForm extends InsightsForm{
         String username = (String) VaadinSession.getCurrent().getAttribute("username");
         createdInsightsDto.setUsername(username);
         insightsService.updateInsights(createdInsightsDto);
-        System.out.println("saveEdit: " + createdInsightsDto);
 
         setVisible(false);
         clearForm();

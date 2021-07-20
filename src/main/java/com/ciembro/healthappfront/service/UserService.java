@@ -37,7 +37,6 @@ public class UserService {
     }
 
     public boolean authenticateUser(UserDto userDto) {
-
         try {
             AuthenticationResponse authenticationResponse = restTemplate.postForObject(BASE_URL + "/authenticate", userDto,
                     AuthenticationResponse.class);

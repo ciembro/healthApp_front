@@ -8,6 +8,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -26,7 +27,8 @@ public class UserReportLayout extends VerticalLayout {
     private UserReportService userReportService = UserReportService.INSTANCE;
     private DrugService drugService = new DrugService();
     private Button backToMenuButton = new Button("Wróć do menu");
-    private Label reportLabel = new Label("Podsumowanie");
+    private H1 header = new H1("Podsumowanie");
+    private Label drugFilterLabel = new Label("Filtruj po leku");
 
     ComboBox<DrugDto> drugFilterComboBox = new ComboBox<>();
     Button submitFilter = new Button("Filtruj");
@@ -38,11 +40,14 @@ public class UserReportLayout extends VerticalLayout {
         setGridColumns();
         setUpDrugFilter();
         submitFilter.addClickListener(e -> filterByDrug());
-        deleteFilter.addClickListener(e -> setGridItems());
+        deleteFilter.addClickListener(e -> {
+            setGridItems();
+        });
 
         HorizontalLayout filters = new HorizontalLayout(drugFilterComboBox, filterButtons);
+        VerticalLayout filterLayout = new VerticalLayout(drugFilterLabel, filters);
 
-        add(backToMenuButton, reportLabel, filters, reportGrid);
+        add(header, backToMenuButton, header, filterLayout, reportGrid);
 
         backToMenuButton.addClickListener(e -> {
             UI.getCurrent().getPage().setLocation("/");
@@ -62,10 +67,10 @@ public class UserReportLayout extends VerticalLayout {
     }
 
     private void setGridColumns(){
-        reportGrid.removeColumnByKey("drugs");
-        reportGrid.removeColumnByKey("insights");
+        reportGrid.removeAllColumns();
 
-        reportGrid.addColumns( "insights.creationDate");
+        reportGrid.addColumn(userReportRowDto ->
+                userReportRowDto.getInsights().getCreationDate()).setHeader("Utworzono");
         reportGrid.addColumn(userReportRowDto -> {
             List<DrugDto> drugDtos = userReportRowDto.getDrugs();
             if (drugDtos == null || drugDtos.isEmpty()){
@@ -73,20 +78,25 @@ public class UserReportLayout extends VerticalLayout {
             }
             return drugDtos.stream()
                     .map(DrugDto::getTradeName)
-                    .collect(Collectors.joining(","));
-        }).setHeader("Drugs");
-        reportGrid.addColumns( "insights.sideEffects",
-                "insights.emotions", "insights.comment");
+                    .collect(Collectors.joining(", "));
+        }).setHeader("Przyjmowane leki");
+        reportGrid.addColumn(userReportRowDto ->
+                userReportRowDto.getInsights().getSideEffects()).setHeader("Skutki uboczne");
+        reportGrid.addColumn(userReportRowDto ->
+                userReportRowDto.getInsights().getEmotions()).setHeader("Emocje");
+        reportGrid.addColumn(userReportRowDto ->
+                userReportRowDto.getInsights().getComment()).setHeader("Komentarz");
+
         reportGrid.addColumn(new ComponentRenderer<>(userReportRowDto -> {
             String url = userReportRowDto.getInsights().getWeather().getIconUrl();
             String alt = userReportRowDto.getInsights().getWeather().getWeatherText();
             Image weather = new Image(url, alt);
-            weather.setWidth("30px");
-            weather.setHeight("30px");
+            weather.setWidth("50px");
+            weather.setHeight("50px");
             return weather;
         }));
         reportGrid.addColumn(userReportRowDto ->
-                userReportRowDto.getInsights().getWeather().getWeatherText()).setHeader("Weather");
+                userReportRowDto.getInsights().getWeather().getWeatherText()).setHeader("Pogoda");
         reportGrid.addColumns("insights.weather.temp");
     }
 
@@ -100,4 +110,5 @@ public class UserReportLayout extends VerticalLayout {
             UI.getCurrent().getPage().setLocation("/");
         }
     }
+
 }

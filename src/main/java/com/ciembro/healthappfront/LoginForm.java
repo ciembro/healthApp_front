@@ -11,19 +11,18 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
-import com.vaadin.flow.server.VaadinSession;
 
 public class LoginForm extends VerticalLayout {
 
     private MainView parent;
     private final UserService userService = new UserService();
-    private final TextField username = new TextField("Username");
-    private final PasswordField password = new PasswordField("Password");
-    private final Button loginButton = new Button("Login");
-    private final Button registerButton = new Button("Register");
+    private final TextField username = new TextField("Użytkownik");
+    private final PasswordField password = new PasswordField("Hasło");
+    private final Button loginButton = new Button("Zaloguj się");
+    private final Button registerButton = new Button("Zarejestruj się");
     private final Binder<UserDto> binder = new Binder<>(UserDto.class);
     private UserDto userDto = new UserDto();
-    private Label badCredentialsLabel = new Label("Bad credentials");
+    private Label badCredentialsLabel = new Label("Nie udało się zalogować.");
 
     public LoginForm(MainView parent){
         this.parent = parent;
@@ -50,6 +49,7 @@ public class LoginForm extends VerticalLayout {
     private void loginUser(){
         UserDto userDto = binder.getBean();
         boolean isAuthenticated = userService.authenticateUser(userDto);
+
         if (!isAuthenticated){
             badCredentialsLabel.setVisible(true);
         } else {
@@ -58,4 +58,5 @@ public class LoginForm extends VerticalLayout {
             setVisible(false);
         }
     }
+
 }

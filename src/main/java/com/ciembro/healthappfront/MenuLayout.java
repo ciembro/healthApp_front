@@ -27,7 +27,6 @@ public class MenuLayout extends VerticalLayout {
         insightsButton.addClickListener(e -> UI.getCurrent().getPage().setLocation("insights"));
         reportButton.addClickListener(e -> UI.getCurrent().getPage().setLocation("report"));
         logoutButton.addClickListener(e -> logout());
-        adminButton.setVisible(isAdmin());
 
         changeLocationButton.addClickListener(e -> {
             parent.getEditUserLayout().setUpForm();
@@ -43,11 +42,15 @@ public class MenuLayout extends VerticalLayout {
         UI.getCurrent().getPage().setLocation("/");
     }
 
-    private boolean isAdmin(){
+    public boolean isAdmin(){
         if (VaadinSession.getCurrent().getAttribute("token") != null){
             String roles = (String)VaadinSession.getCurrent().getAttribute("role");
             return roles.contains("ROLE_ADMIN");
         }
         return false;
+    }
+
+    public Button getAdminButton() {
+        return adminButton;
     }
 }

@@ -1,13 +1,13 @@
 package com.ciembro.healthappfront.insights;
 
 import com.ciembro.healthappfront.dto.CreatedInsightsDto;
+import com.ciembro.healthappfront.dto.EmotionalStateDto;
 import com.ciembro.healthappfront.service.InsightsService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
-
 
 public class InsightsListLayout extends VerticalLayout {
 
@@ -31,11 +31,15 @@ public class InsightsListLayout extends VerticalLayout {
 
     private void setGridColumns(){
 
-        insightGrid.setColumns("creationDate", "emotions", "sideEffects", "comment");
+        insightGrid.removeAllColumns();
+        insightGrid.addColumn(CreatedInsightsDto::getCreationDate).setHeader("Utworzono");
+        insightGrid.addColumn(CreatedInsightsDto::getEmotions).setHeader("Emocje");
+        insightGrid.addColumn(CreatedInsightsDto::getSideEffects).setHeader("Skutki uboczne");
+        insightGrid.addColumn(CreatedInsightsDto::getComment).setHeader("Komentarz");
         insightGrid.addColumn(new ComponentRenderer<>(insightsDto -> {
            String url = insightsDto.getWeather().getIconUrl();
            return new Image(url, "");
-        })).setHeader("weather");
+        })).setHeader("Pogoda");
         insightGrid.addComponentColumn((insightsDto -> {
             Button button = new Button("Edytuj");
             button.addClickListener(e -> {

@@ -24,8 +24,7 @@ public class MainView extends VerticalLayout {
             loginForm.setVisible(true);
          }else {
             setWelcomeHeader();
-            menuLayout.setVisible(true);
-            loginForm.setVisible(false);
+            showMenu();
         }
         add(welcomeHeader, menuLayout, loginForm, editUserLayout);
 
@@ -39,6 +38,7 @@ public class MainView extends VerticalLayout {
     }
 
     public void showMenu(){
+        menuLayout.getAdminButton().setVisible(getMenuLayout().isAdmin());
         welcomeHeader.setVisible(true);
         menuLayout.setVisible(true);
         loginForm.setVisible(false);
