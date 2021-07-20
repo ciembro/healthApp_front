@@ -24,7 +24,7 @@ public class UserTreatmentAddForm extends UserTreatmentForm {
     @Override
     public void save() {
         userTreatmentDto = binder.getBean();
-        if (startedAt.getValue().isBefore(finishedAt.getValue())){
+        if (finishedAt.getValue() == null || startedAt.getValue().isBefore(finishedAt.getValue())){
             String username = (String) VaadinSession.getCurrent().getAttribute("username");
             userTreatmentDto.setUsername(username);
             userTreatmentService.createUserTreatment(userTreatmentDto);
