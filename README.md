@@ -6,4 +6,6 @@ Link do backendu: https://github.com/ciembro/healthApp.git
 1. user, hasło: user
 2. admin, hasło: admin <br>
 Idea aplikacji: Aplikacja stworzona jako wsparcie do dbania o zdrowie psychiczne, z nastawieniem na osoby w kryzysie psychicznym stosujące farmakoterapię.
-Aplikacja umożliwia rejestrację leczenia, zapisywanie podstawowych skutków ubocznych, rejestrowanie swojego nastroju oraz odniesienie tych informacji do warunków pogodowych.
+Aplikacja umożliwia rejestrację leczenia, zapisywanie podstawowych skutków ubocznych, rejestrowanie swojego nastroju oraz odniesienie tych informacji do warunków pogodowych.<br>
+
+Nierozwiązany problem: w zakładce Lista przyjmowanych leków po pobraniu ulotki konieczne jest odświeżenie okna, aby zaczęły działać przyciski.
