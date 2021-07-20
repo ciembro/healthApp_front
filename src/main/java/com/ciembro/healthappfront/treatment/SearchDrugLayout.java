@@ -24,7 +24,7 @@ public class SearchDrugLayout extends VerticalLayout {
         search.setAlignItems(Alignment.END);
 //        search.getStyle().set("border", "1px solid red");
 //        getStyle().set("border", "1px solid");
-        drugGrid.setColumns("internationalName", "tradeName", "dose", "brand");
+        drugGrid.setColumns("internationalName", "tradeName", "dosage", "brand");
         drugGrid.setSizeFull();
         drugGrid.setVisible(false);
 

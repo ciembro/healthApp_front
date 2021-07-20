@@ -38,7 +38,7 @@ public class UserTreatmentAddForm extends UserTreatmentForm {
 
         internationalName.setValue(drugDto.getInternationalName());
         tradeName.setValue(drugDto.getTradeName());
-        dose.setValue(drugDto.getDose());
+        dose.setValue(drugDto.getDosage());
         brand.setValue(drugDto.getBrand());
         startedAt.setValue(LocalDate.now());
     }

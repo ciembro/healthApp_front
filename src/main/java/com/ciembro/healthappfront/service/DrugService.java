@@ -12,16 +12,7 @@ public class DrugService {
 
     private RestTemplate restTemplate = new RestTemplate();
     private final static String BASE_URL = "http://localhost:8080/v1";
-
-    private HttpHeaders createHeaders(){
-        Object objToken =  VaadinSession.getCurrent().getAttribute("token");
-        if (objToken != null) {
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("Authorization", "Bearer " + objToken);
-            return headers;
-        }
-        return null;
-    }
+    private final HeadersService headersService = HeadersService.INSTANCE;
 
     public List<DrugDto> searchMatchingDrugs(String text){
 
@@ -29,7 +20,7 @@ public class DrugService {
             return new ArrayList<>();
         }
         try {
-            HttpHeaders headers = createHeaders();
+            HttpHeaders headers = headersService.getHeaders();
             if (headers != null){
                 HttpEntity<String> entity = new HttpEntity<>(headers);
 
@@ -50,24 +41,26 @@ public class DrugService {
         return new ArrayList<>();
     }
 
-        public DrugDto getDrugById(long id){
+        public List<DrugDto> getDrugsByUser(){
             try {
-                HttpHeaders headers = createHeaders();
+                HttpHeaders headers = headersService.getHeaders();
                 if (headers != null){
                     HttpEntity<String> entity = new HttpEntity<>(headers);
-                    ResponseEntity<DrugDto> response = restTemplate.exchange(
-                            BASE_URL + "/drugs/" + id,
+
+                    ResponseEntity<DrugDto[]> response = restTemplate.exchange(
+                            BASE_URL + "/drugs/user",
                             HttpMethod.GET,
                             entity,
-                            DrugDto.class);
+                            DrugDto[].class);
 
-                    return response.getBody();
+                    DrugDto[] responseBody = response.getBody();
+                    return Optional.ofNullable(responseBody)
+                            .map(Arrays::asList)
+                            .orElse(new ArrayList<>());
                 }
             } catch (RestClientException e){
                 System.out.println(e.getMessage());
             }
-            return null;
+            return new ArrayList<>();
     }
-
-
 }

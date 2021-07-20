@@ -13,7 +13,7 @@ public class DrugDto {
     private int uniqueDrugId;
     private String internationalName;
     private String tradeName;
-    private String dose;
+    private String dosage;
     private String brand;
     private String activeSubstance;
     private String leafletUrl;

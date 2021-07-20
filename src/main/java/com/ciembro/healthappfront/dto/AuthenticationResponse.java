@@ -6,8 +6,11 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class JwtToken {
+public class AuthenticationResponse {
 
     @JsonProperty("jwt")
     private String token;
+
+    @JsonProperty("role")
+    private String role;
 }

@@ -1,16 +1,19 @@
 package com.ciembro.healthappfront.service;
 
-import com.ciembro.healthappfront.dto.*;
-import org.springframework.http.*;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import com.ciembro.healthappfront.dto.CreatedInsightsDto;
+import com.ciembro.healthappfront.dto.CreatedUserTreatmentDto;
+import com.ciembro.healthappfront.dto.InsightsDto;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 public enum InsightsService {
 
@@ -38,8 +41,8 @@ public enum InsightsService {
             }
         }
         return null;
-
     }
+
     public CreatedInsightsDto updateInsights(CreatedInsightsDto insightsDto){
         HttpHeaders headers = headersService.getHeaders();
         if (headers != null) {

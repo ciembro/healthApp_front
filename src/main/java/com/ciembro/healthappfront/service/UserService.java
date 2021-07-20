@@ -1,28 +1,53 @@
 package com.ciembro.healthappfront.service;
 
-import com.ciembro.healthappfront.dto.JwtToken;
-import com.ciembro.healthappfront.dto.UserDto;
-import com.ciembro.healthappfront.dto.UserToRegisterDto;
+import com.ciembro.healthappfront.dto.*;
 import com.vaadin.flow.server.VaadinSession;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Optional;
 
 
 @Service
 public class UserService {
 
     private final RestTemplate restTemplate = new RestTemplate();
+    private HeadersService headersService = HeadersService.INSTANCE;
     private final static String BASE_URL = "http://localhost:8080/v1";
+
+    public void changeUserLocation(String location){
+        try {
+            HttpHeaders headers = headersService.getHeaders();
+            if (headers != null){
+                HttpEntity<String> entity = new HttpEntity<>(headers);
+                String username = (String)VaadinSession.getCurrent().getAttribute("username");
+                restTemplate.exchange(
+                        BASE_URL + "/" + username + "/" +location,
+                        HttpMethod.PUT,
+                        entity,
+                        ResponseEntity.class);
+            }
+        } catch (RestClientException e){
+            System.out.println(e.getMessage());
+        }
+    }
 
     public boolean authenticateUser(UserDto userDto) {
 
         try {
-            JwtToken jwtToken = restTemplate.postForObject(BASE_URL + "/authenticate", userDto,
-                    JwtToken.class);
-            if (jwtToken != null){
-                VaadinSession.getCurrent().setAttribute("token", jwtToken.getToken());
+            AuthenticationResponse authenticationResponse = restTemplate.postForObject(BASE_URL + "/authenticate", userDto,
+                    AuthenticationResponse.class);
+            if (authenticationResponse != null){
+                VaadinSession.getCurrent().setAttribute("token", authenticationResponse.getToken());
                 VaadinSession.getCurrent().setAttribute("username", userDto.getUsername());
+                VaadinSession.getCurrent().setAttribute("role", authenticationResponse.getRole());
                 return true;
             }
         } catch (RestClientException e) {

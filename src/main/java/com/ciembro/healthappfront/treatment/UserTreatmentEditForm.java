@@ -35,7 +35,7 @@ public class UserTreatmentEditForm extends UserTreatmentForm{
         DrugDto drugDto = treatmentDto.getDrugDto();
         internationalName.setValue(drugDto.getInternationalName());
         tradeName.setValue(drugDto.getTradeName());
-        dose.setValue(drugDto.getDose());
+        dose.setValue(drugDto.getDosage());
         brand.setValue(drugDto.getBrand());
         startedAt.setValue(treatmentDto.getStartedAt());
         finishedAt.setValue(treatmentDto.getFinishedAt());
