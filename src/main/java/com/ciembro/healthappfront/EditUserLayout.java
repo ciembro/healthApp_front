@@ -56,7 +56,7 @@ public class EditUserLayout extends VerticalLayout {
     }
 
     public void setUpForm(){
-        String username = (String) VaadinSession.getCurrent().getAttribute("Użytkownik");
+        String username = (String) VaadinSession.getCurrent().getAttribute("username");
         this.username.setValue(username);
         this.username.setReadOnly(true);
     }
